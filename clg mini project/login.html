@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login & Registration | SIP Report Generator</title>
+  <meta name="description" content="Individual login and registration portal for the Student Interest Portfolio Report Generator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light" class="auth-body">
+
+  <div class="auth-page-wrapper">
+    
+    <!-- Top Bar with Theme Toggle -->
+    <header class="auth-top-bar">
+      <div class="auth-brand">
+        <div class="brand-logo">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <div>
+          <span class="auth-brand-name">SIP Report Generator</span>
+          <span class="auth-brand-badge">5th Sem CSE Project</span>
+        </div>
+      </div>
+
+      <div class="auth-top-actions">
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme">
+          <span class="theme-icon light-icon">☀️</span>
+          <span class="theme-icon dark-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Auth Card Container -->
+    <main class="auth-main-container">
+      <div class="auth-dual-card">
+
+        <!-- Left Showcase Side -->
+        <div class="auth-showcase-panel">
+          <div class="showcase-content">
+            <div class="academic-tag">Dept of Computer Science & Engineering</div>
+            <h1 class="showcase-title">Student Interest Portfolio System</h1>
+            <p class="showcase-desc">
+              An intelligent academic tool that records and evaluates student activity routines, calculates dynamic interest percentages, and generates comprehensive portfolio reports for faculty evaluation.
+            </p>
+
+            <div class="showcase-features-list">
+              <div class="showcase-feature-item">
+                <div class="feature-icon-badge">📅</div>
+                <div>
+                  <strong>Weekly Timetable Routine Analytics</strong>
+                  <p>Comprehensive Monday-to-Sunday routine mapping with automatic hourly time-tracking and interest percentage calculation.</p>
+                </div>
+              </div>
+
+              <div class="showcase-feature-item">
+                <div class="feature-icon-badge">🎯</div>
+                <div>
+                  <strong>Top 3 Priority Identification</strong>
+                  <p>Automatic discovery of primary, secondary, and tertiary skill areas.</p>
+                </div>
+              </div>
+
+              <div class="showcase-feature-item">
+                <div class="feature-icon-badge">📑</div>
+                <div>
+                  <strong>HOD & Faculty Evaluation Report</strong>
+                  <p>Generate clean, printable PDF-ready academic portfolios.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="showcase-footer-note">
+              <span class="status-dot"></span>
+              <span>Client-Side LocalStorage Persistence • No Backend Required</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Form Side (Login & Register Tabs) -->
+        <div class="auth-form-panel">
+          
+          <!-- Auth Mode Toggle Tabs -->
+          <div class="auth-tabs-header">
+            <button class="auth-tab-btn active" id="tabLoginBtn" type="button">
+              <span>Sign In</span>
+            </button>
+            <button class="auth-tab-btn" id="tabRegisterBtn" type="button">
+              <span>Register New Student</span>
+            </button>
+          </div>
+
+          <!-- Alert / Status Notice -->
+          <div class="auth-alert" id="authAlert" style="display: none;"></div>
+
+          <!-- Active Session Notice (Shown if user already has an active session) -->
+          <div class="active-session-banner" id="activeSessionNotice" style="display: none;">
+            <div class="asb-content">
+              <span class="asb-icon">🎓</span>
+              <div>
+                <div class="asb-title">Active Student Session Detected</div>
+                <div class="asb-sub">Signed in as <strong id="curSessionName">Sahana K.</strong> (<code id="curSessionUSN">1MS22CS095</code>)</div>
+              </div>
+            </div>
+            <div class="asb-actions">
+              <a href="index.html" class="btn btn-sm btn-primary">Open Dashboard &rarr;</a>
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="auth.logout(true)" title="Sign out this student">Sign Out</button>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- FORM 1: LOGIN FORM                            -->
+          <!-- ============================================== -->
+          <form id="loginForm" class="auth-form-box" onsubmit="event.preventDefault(); auth.handleLogin();">
+            <div class="form-intro">
+              <h2 class="form-title">Individual Student Login</h2>
+              <p class="form-subtitle">Choose an individual student account below or enter your USN and password.</p>
+            </div>
+
+            <!-- Quick Individual Student Account Switcher -->
+            <div class="quick-accounts-section">
+              <div class="quick-accounts-header">
+                <span class="qas-title">Select Student Account</span>
+                <span class="qas-badge">1-Click Sign In ⚡</span>
+              </div>
+              <div class="student-accounts-list" id="studentAccountsList">
+                <!-- Dynamically populated with individual student cards by auth.js -->
+              </div>
+            </div>
+
+            <div class="auth-divider">
+              <span>or sign in with USN &amp; password</span>
+            </div>
+
+            <div class="form-group">
+              <label for="loginStudentId">Student ID / USN *</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🎓</span>
+                <input type="text" id="loginStudentId" class="form-control" required placeholder="e.g. 1MS22CS095" autocomplete="username">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Password *</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="loginPassword" class="form-control" required placeholder="Enter password (default: student123)" autocomplete="current-password">
+                <button type="button" class="pwd-toggle-btn" onclick="auth.togglePasswordVisibility('loginPassword', this)" title="Show/Hide Password">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <div class="form-aux-row">
+              <label class="remember-label">
+                <input type="checkbox" id="loginRememberMe" checked>
+                <span>Remember me on this browser</span>
+              </label>
+              <button type="button" class="text-link-btn" onclick="auth.fillStudentCredentials('1MS22CS095')">Use Sahana (Demo)</button>
+            </div>
+
+            <div class="form-actions-stack">
+              <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+                <span>Sign In to Dashboard &rarr;</span>
+              </button>
+            </div>
+
+            <div class="form-footer-switch">
+              <span>Need a new student profile?</span>
+              <button type="button" class="text-link-btn" onclick="auth.switchTab('register')">Register New Student Account</button>
+            </div>
+          </form>
+
+          <!-- ============================================== -->
+          <!-- FORM 2: REGISTRATION FORM                     -->
+          <!-- ============================================== -->
+          <form id="registerForm" class="auth-form-box" style="display: none;" onsubmit="event.preventDefault(); auth.handleRegister();">
+            <div class="form-intro">
+              <h2 class="form-title">Student Registration</h2>
+              <p class="form-subtitle">Create a student account to record weekly activities and generate custom reports.</p>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regFullName">Full Name *</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">👤</span>
+                  <input type="text" id="regFullName" class="form-control" required placeholder="e.g. Sahana K.">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="regStudentId">Student ID / USN *</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">🎓</span>
+                  <input type="text" id="regStudentId" class="form-control" required placeholder="e.g. 1MS22CS095">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regBranch">Branch / Discipline *</label>
+                <select id="regBranch" class="form-control" required>
+                  <option value="Computer Science & Engineering" selected>Computer Science & Engineering</option>
+                  <option value="Information Science & Engineering">Information Science & Engineering</option>
+                  <option value="Artificial Intelligence & Machine Learning">AI & Machine Learning</option>
+                  <option value="Data Science">Data Science</option>
+                  <option value="Electronics & Communication">Electronics & Communication</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="regSemester">Semester *</label>
+                <select id="regSemester" class="form-control" required>
+                  <option value="1st Semester">1st Semester</option>
+                  <option value="2nd Semester">2nd Semester</option>
+                  <option value="3rd Semester">3rd Semester</option>
+                  <option value="4th Semester">4th Semester</option>
+                  <option value="5th Semester" selected>5th Semester</option>
+                  <option value="6th Semester">6th Semester</option>
+                  <option value="7th Semester">7th Semester</option>
+                  <option value="8th Semester">8th Semester</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">College Email ID</label>
+              <div class="input-with-icon">
+                <span class="input-icon">✉️</span>
+                <input type="email" id="regEmail" class="form-control" placeholder="e.g. sahana@college.edu">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regPassword">Create Password *</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">🔒</span>
+                  <input type="password" id="regPassword" class="form-control" required placeholder="At least 6 chars">
+                  <button type="button" class="pwd-toggle-btn" onclick="auth.togglePasswordVisibility('regPassword', this)">👁️</button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="regConfirmPassword">Confirm Password *</label>
+                <div class="input-with-icon">
+                  <span class="input-icon">🔒</span>
+                  <input type="password" id="regConfirmPassword" class="form-control" required placeholder="Re-enter password">
+                  <button type="button" class="pwd-toggle-btn" onclick="auth.togglePasswordVisibility('regConfirmPassword', this)">👁️</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions-stack">
+              <button type="submit" class="btn btn-success btn-block" id="regSubmitBtn">
+                <span>Create Student Account &rarr;</span>
+              </button>
+            </div>
+
+            <div class="form-footer-switch">
+              <span>Already have an account?</span>
+              <button type="button" class="text-link-btn" onclick="auth.switchTab('login')">Sign in here</button>
+            </div>
+
+            <div class="guest-skip-bar">
+              <button type="button" class="text-link-btn text-muted-link" onclick="auth.quickDemoLogin()">
+                Skip Registration &bull; Open Dashboard as Guest &rarr;
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="auth-footer">
+      <span>Student Interest Portfolio Report Generator &bull; 5th Semester CSE Mini Project</span>
+      <span>Department of Computer Science & Engineering</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Django Backend API & Auth Logic Scripts -->
+  <script src="api.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+# Student Interest Portfolio Report Generator - Django Backend Dependencies
+# 5th-Semester Computer Science & Engineering Mini Project
+
+Django>=5.0.0

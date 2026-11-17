@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Interest Portfolio Report Generator | 5th Sem CSE Mini Project</title>
+  <meta name="description"
+    content="A professional academic tool to analyze student weekly timetable activities, calculate interest percentages, and generate personalized portfolio reports.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="light">
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Main Application Wrapper -->
+  <div class="app-container">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+            <path d="M6 12v5c3 3 9 3 12 0v-5" />
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h2 class="brand-title">SIP Report</h2>
+          <span class="brand-tag">CSE Mini Project</span>
+        </div>
+        <button class="icon-btn mobile-close-btn" id="closeSidebarBtn" title="Close Menu" aria-label="Close menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Student Mini Profile in Sidebar -->
+      <div class="sidebar-profile-card">
+        <div class="avatar" id="sidebarAvatar">ST</div>
+        <div class="profile-details">
+          <div class="profile-name" id="sidebarStudentName">Sahana K.</div>
+          <div class="profile-id" id="sidebarStudentID">USN: 1MS22CS095</div>
+          <div class="profile-meta" id="sidebarStudentMeta">CSE • 5th Semester</div>
+          <a href="javascript:void(0)" onclick="app.logout()" class="profile-switch-link"
+            title="Switch Student or Register">🔄 Switch Student</a>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="dashboard" id="navDashboard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+
+        <button class="nav-item" data-tab="timetable" id="navTimetable">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span>Weekly Timetable</span>
+        </button>
+
+        <button class="nav-item" data-tab="report" id="navReport">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Portfolio Report</span>
+        </button>
+
+        <button class="nav-item" data-tab="settings" id="navSettings">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+          <span>Student Settings</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="theme-switch-row">
+          <span class="theme-label">Theme</span>
+          <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle theme">
+            <span class="theme-icon light-icon">☀️</span>
+            <span class="theme-icon dark-icon">🌙</span>
+          </button>
+        </div>
+        <div class="system-status">
+          <span class="status-dot"></span>
+          <span>Storage: Active (Local)</span>
+        </div>
+        <button class="btn btn-sm btn-outline-danger btn-block" onclick="app.logout()"
+          title="Logout and return to Login page">
+          <span>🚪 Logout / Switch Student</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+      <!-- Top Application Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <button class="icon-btn mobile-menu-btn" id="openSidebarBtn" aria-label="Open menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div>
+            <h1 class="header-title">Student Interest Portfolio Report Generator</h1>
+            <p class="header-subtitle">Analyze student activities, discover interests, and generate a personalized
+              interest portfolio.</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="app.showTab('timetable')"
+            title="View and customize weekly timetable">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Weekly Timetable</span>
+          </button>
+          <button class="btn btn-secondary" id="headerDemoBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Load Demo Data</span>
+          </button>
+          <button class="btn btn-primary" id="headerReportBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Generate Portfolio Report</span>
+          </button>
+          <div class="header-user-badge" id="headerUserBadge" onclick="app.showTab('settings')"
+            title="Click to view student profile &amp; settings">
+            <div class="header-avatar" id="headerAvatar">SK</div>
+            <div class="header-user-info">
+              <div class="header-user-name" id="headerStudentName">Sahana K.</div>
+              <div class="header-user-usn" id="headerStudentUSN">USN: 1MS22CS095</div>
+            </div>
+          </div>
+          <button class="btn btn-danger-soft" id="headerLogoutBtn" onclick="app.logout()"
+            title="Logout and return to Login page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Logout</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views Container -->
+      <div class="content-body">
+
+        <!-- ============================================== -->
+        <!-- VIEW 1: DASHBOARD                              -->
+        <!-- ============================================== -->
+        <section class="tab-view active" id="view-dashboard">
+
+          <!-- Student Greeting Banner -->
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <div class="tag-chip">Academic Year 2024–2025 • Department of Computer Science & Engineering</div>
+              <h2 class="welcome-heading">Welcome, <span id="bannerStudentName">Sahana K.</span>!</h2>
+              <p class="welcome-sub">Map your weekly academic, technical, and extracurricular routine to uncover your
+                true interest profile and generate an official portfolio report.</p>
+            </div>
+            <div class="welcome-badges">
+              <div class="info-pill"><span class="pill-label">ID:</span> <span id="bannerStudentID">1MS22CS095</span>
+              </div>
+              <div class="info-pill"><span class="pill-label">Branch:</span> <span id="bannerBranch">CSE</span></div>
+              <div class="info-pill"><span class="pill-label">Semester:</span> <span id="bannerSemester">5th
+                  Semester</span></div>
+            </div>
+          </div>
+
+          <!-- Key Performance Indicators (KPIs) -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap icon-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Total Tracked Slots</span>
+                <div class="kpi-value"><span id="kpiTotalHours">0</span> <span class="kpi-unit">slots</span></div>
+                <span class="kpi-hint" id="kpiWeeklyTarget">Across 70 available slots</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap icon-emerald">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Number of Active Days</span>
+                <div class="kpi-value"><span id="kpiActiveDays">0</span> <span class="kpi-unit">/ 7 days</span></div>
+                <span class="kpi-hint" id="kpiActiveDaysHint">Days with logged activities</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap icon-violet">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                  </polygon>
+                </svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Top Interest</span>
+                <div class="kpi-value kpi-highlight" id="kpiTopInterest">None Yet</div>
+                <span class="kpi-hint" id="kpiTopCategory">Highest weekly engagement</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon-wrap icon-amber">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 2a10 10 0 0 1 10 10"></path>
+                </svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Top Interest Percentage</span>
+                <div class="kpi-value"><span id="kpiTopPercentage">0</span><span class="kpi-unit">%</span></div>
+                <span class="kpi-hint" id="kpiTopHoursHint">Of total tracked time</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons Row -->
+          <div class="action-card">
+            <h3 class="section-title">Workflow Actions</h3>
+            <div class="button-flow-grid">
+              <button class="btn btn-action" onclick="app.showTab('timetable')" title="Open weekly academic timetable">
+                <span class="btn-icon">📅</span>
+                <span class="btn-text-wrap">
+                  <strong>Weekly Timetable</strong>
+                  <small>Manage Monday–Sunday schedule</small>
+                </span>
+              </button>
+
+              <button class="btn btn-action" id="dashGenerateReportBtn" onclick="app.showTab('report')">
+                <span class="btn-icon">📑</span>
+                <span class="btn-text-wrap">
+                  <strong>Generate Portfolio Report</strong>
+                  <small>HOD ready academic report & PDF</small>
+                </span>
+              </button>
+
+              <button class="btn btn-action" id="dashLoadDemoBtn">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text-wrap">
+                  <strong>Load Demo Data</strong>
+                  <small>Pre-fill realistic 40-slot schedule</small>
+                </span>
+              </button>
+
+              <button class="btn btn-action btn-danger-soft" id="dashClearBtn">
+                <span class="btn-icon">🗑️</span>
+                <span class="btn-text-wrap">
+                  <strong>Reset All Data</strong>
+                  <small>Reset all recorded metrics</small>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dashboard Highlights: Top 3 & Quick Insight preview -->
+          <div class="dash-preview-grid">
+            <!-- Top 3 Interests Podium -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Top 3 Primary Interests</h3>
+                  <p class="card-subtitle">Calculated automatically from weekly activity distribution</p>
+                </div>
+                <span class="badge" id="dashTotalActivitiesBadge">0 Activities Logged</span>
+              </div>
+              <div class="podium-container" id="dashTop3Container">
+                <!-- Dynamically populated or empty state -->
+                <div class="empty-state">
+                  <div class="empty-icon">📌</div>
+                  <p>No timetable activities recorded yet.</p>
+                  <button class="btn btn-sm btn-primary" onclick="app.loadDemoData()">Load Demo Schedule</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Insight Callout -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Automatic Portfolio Insight</h3>
+                  <p class="card-subtitle">Algorithmic summary based on your routine</p>
+                </div>
+                <span class="badge badge-info">CSE AI Engine</span>
+              </div>
+              <div class="insight-box" id="dashInsightBox">
+                <p class="insight-text" id="dashInsightText">
+                  Log your activities across Monday through Sunday or click <strong>"Load Demo Data"</strong> to
+                  generate your weekly interest breakdown and personalized portfolio.
+                </p>
+                <div class="insight-meta-grid" id="dashInsightMeta">
+                  <div class="insight-meta-item">
+                    <span class="meta-label">Technical Focus:</span>
+                    <strong id="dashTechFocus">—</strong>
+                  </div>
+                  <div class="insight-meta-item">
+                    <span class="meta-label">Extracurricular:</span>
+                    <strong id="dashCreativeFocus">—</strong>
+                  </div>
+                  <div class="insight-meta-item">
+                    <span class="meta-label">Most Active Day:</span>
+                    <strong id="dashActiveDay">—</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Timetable Preview Card -->
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div>
+                <div class="tag-chip tag-chip-sm" style="margin-bottom: 6px;">📅 Weekly Schedule Snapshot</div>
+                <h3 class="card-title">Weekly Timetable Overview</h3>
+                <p class="card-subtitle">Overview of scheduled subjects and commitments across Monday through Sunday.
+                </p>
+              </div>
+              <button class="btn btn-sm btn-primary" onclick="app.showTab('timetable')">
+                <span>View Full Timetable Grid &rarr;</span>
+              </button>
+            </div>
+            <div class="dash-tt-preview-grid" id="dashTimetablePreview">
+              <!-- Dynamically populated with active schedule subjects -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 2: WEEKLY ACADEMIC TIMETABLE              -->
+        <!-- ============================================== -->
+        <section class="tab-view" id="view-timetable">
+
+          <div class="page-header-row">
+            <div>
+              <div class="tag-chip tag-chip-sm" style="margin-bottom: 6px;">📅 Weekly Schedule &amp; Routine Management
+              </div>
+              <h2 class="page-title">Weekly Academic Timetable</h2>
+              <p class="page-subtitle">Manage your Monday through Sunday academic schedule across 10 hourly periods each
+                day.</p>
+            </div>
+            <div class="table-actions-toolbar">
+              <button class="btn btn-secondary" onclick="app.loadDemoTimetable()"
+                title="Populate realistic 40-hour weekly schedule">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                <span>⚡ Load Demo Timetable</span>
+              </button>
+              <button class="btn btn-outline-danger" onclick="app.clearTimetable(true)"
+                title="Clear timetable slots to start fresh">
+                <span>🧹 Clear Schedule</span>
+              </button>
+              <button class="btn btn-secondary" onclick="window.print()" title="Print current timetable view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print Schedule</span>
+              </button>
+              <button class="btn btn-primary" onclick="app.showTab('report')">
+                <span>View Portfolio Report &rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Timetable Metrics Strip -->
+          <div class="timetable-stats-strip">
+            <div class="stat-pill">
+              <span class="stat-pill-label">Logged Slots:</span>
+              <strong class="stat-pill-value" id="ttTotalSlots">40</strong>
+              <span class="text-muted" style="font-size:0.75rem;">/ 70 slots</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-label">Active Days:</span>
+              <strong class="stat-pill-value" id="ttActiveDays">7</strong>
+              <span class="text-muted" style="font-size:0.75rem;">/ 7 days</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-pill-label">Top Scheduled Subject:</span>
+              <strong class="stat-pill-value" id="ttTopSubject" style="color:var(--primary);">C Programming (10
+                hrs)</strong>
+            </div>
+            <div class="stat-pill" style="margin-left:auto;">
+              <span class="status-live">● Timetable Active &amp; Synced</span>
+            </div>
+          </div>
+
+          <!-- Activity Category Legend -->
+          <div class="timetable-notice-bar">
+            <div class="activity-legend-strip" style="margin-bottom:0;">
+              <span class="legend-title">Categories:</span>
+              <span class="legend-chip chip-technical"><span class="chip-dot"></span> Technical Core</span>
+              <span class="legend-chip chip-creative"><span class="chip-dot"></span> Creative Arts</span>
+              <span class="legend-chip chip-sports"><span class="chip-dot"></span> Sports &amp; Athletics</span>
+            </div>
+          </div>
+
+          <!-- The Weekly Timetable Grid Table -->
+          <div class="card timetable-card">
+            <div class="timetable-responsive-wrapper">
+              <table class="timetable-grid" id="mainTimetableGrid">
+                <thead>
+                  <tr>
+                    <th class="time-col-header">Time Period</th>
+                    <th class="day-col-header" data-day="Monday">
+                      <div class="th-day-name">Monday</div>
+                      <div class="th-day-hours" id="thHours-Monday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header" data-day="Tuesday">
+                      <div class="th-day-name">Tuesday</div>
+                      <div class="th-day-hours" id="thHours-Tuesday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header" data-day="Wednesday">
+                      <div class="th-day-name">Wednesday</div>
+                      <div class="th-day-hours" id="thHours-Wednesday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header" data-day="Thursday">
+                      <div class="th-day-name">Thursday</div>
+                      <div class="th-day-hours" id="thHours-Thursday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header" data-day="Friday">
+                      <div class="th-day-name">Friday</div>
+                      <div class="th-day-hours" id="thHours-Friday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header weekend-header" data-day="Saturday">
+                      <div class="th-day-name">Saturday</div>
+                      <div class="th-day-hours" id="thHours-Saturday">0 hrs</div>
+                    </th>
+                    <th class="day-col-header weekend-header" data-day="Sunday">
+                      <div class="th-day-name">Sunday</div>
+                      <div class="th-day-hours" id="thHours-Sunday">0 hrs</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="timetableGridTbody">
+                  <!-- Generated dynamically by app.renderTimetable() -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Timetable Subjects Summary -->
+          <div class="card" style="margin-top:24px;">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">Weekly Subject Commitment Summary</h3>
+                <p class="card-subtitle">Every subject active in your weekly timetable is listed below with its
+                  scheduled weekly commitment.</p>
+              </div>
+              <span class="badge badge-purple" id="ttUniqueSubjCountBadge">Active Subjects</span>
+            </div>
+            <div class="timetable-subjects-summary-grid" id="timetableSubjectsSummary">
+              <!-- Dynamically populated with all active timetable subjects -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 4: STUDENT INTEREST PORTFOLIO REPORT      -->
+        <!-- ============================================== -->
+        <section class="tab-view" id="view-report">
+
+          <!-- Report Toolbar (Hidden during print) -->
+          <div class="report-toolbar no-print">
+            <div class="toolbar-left">
+              <button class="btn btn-secondary" onclick="app.showTab('dashboard')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="19" y1="12" x2="5" y2="12"></line>
+                  <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Back to Dashboard</span>
+              </button>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn btn-secondary" id="savePdfBtn" onclick="app.printReport()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Save as PDF</span>
+              </button>
+              <button class="btn btn-primary" id="printReportBtn" onclick="app.printReport()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Print Report</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Printable Academic Report Document -->
+          <div class="academic-report-sheet" id="printableReport">
+
+            <!-- Report Document Header -->
+            <div class="report-header">
+              <div class="institution-header">
+                <div class="institution-logo-badge">CSE</div>
+                <div class="institution-text">
+                  <h4 class="dept-name" id="repDeptName">DEPARTMENT OF COMPUTER SCIENCE &amp; ENGINEERING</h4>
+                  <p class="college-name" id="repCollegeName">Academic Evaluation &amp; Student Profiling System</p>
+                  <p class="project-tag">5th Semester CSE Mini Project &bull; Weekly Academic Evaluation</p>
+                </div>
+              </div>
+              <div class="report-title-strip">
+                <h2 class="report-main-title">WEEKLY STUDENT INTEREST PORTFOLIO REPORT</h2>
+                <div class="report-meta-line">
+                  <span>Evaluation Window: <strong>Weekly Routine (Mon &ndash; Sun)</strong></span>
+                  <span>Report ID: <strong id="repGeneratedId">SIP-2024-8841</strong></span>
+                  <span>Date: <strong id="repDateStr">October 13, 2026</strong></span>
+                  <span>Academic Year: <strong id="repAcademicYear">2024–2025</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 1: Student Particulars -->
+            <div class="report-student-card">
+              <h3 class="rep-section-title">1. STUDENT PARTICULARS</h3>
+              <div class="student-info-grid">
+                <div class="s-info-item">
+                  <span class="s-label">Student Name:</span>
+                  <strong class="s-value" id="repStudentName">Sahana K.</strong>
+                </div>
+                <div class="s-info-item">
+                  <span class="s-label">Student ID / USN:</span>
+                  <strong class="s-value" id="repStudentID">1MS22CS095</strong>
+                </div>
+                <div class="s-info-item">
+                  <span class="s-label">Branch / Discipline:</span>
+                  <strong class="s-value" id="repBranch">Computer Science &amp; Engineering</strong>
+                </div>
+                <div class="s-info-item">
+                  <span class="s-label">Academic Semester:</span>
+                  <strong class="s-value" id="repSemester">5th Semester</strong>
+                </div>
+                <div class="s-info-item">
+                  <span class="s-label">Weekly Tracked Time:</span>
+                  <strong class="s-value" id="repTotalHours">40 Slots / Week (100%)</strong>
+                </div>
+                <div class="s-info-item">
+                  <span class="s-label">Primary Weekly Interest:</span>
+                  <strong class="s-value" id="repPrimaryInterest">C Programming (30.0%)</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: Weekly Time Allocation & Percentage Metrics -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">2. WEEKLY SUMMARY &amp; PERCENTAGE METRICS</h3>
+                <span class="rep-caption">Hourly &amp; Percentage Allocations across 7-Day Routine</span>
+              </div>
+              <div class="rep-weekly-summary-grid">
+                <div class="rep-summary-card">
+                  <div class="rsc-label">Total Weekly Routine</div>
+                  <div class="rsc-val" id="repMetricTotalHours">40 hrs / week</div>
+                  <div class="rsc-sub">100.0% of logged schedule</div>
+                </div>
+                <div class="rep-summary-card">
+                  <div class="rsc-label">Weekly Consistency</div>
+                  <div class="rsc-val" id="repMetricActiveDays">7 / 7 Active Days</div>
+                  <div class="rsc-sub" id="repMetricDailyAvg">Avg: 5.7 hrs / day</div>
+                </div>
+                <div class="rep-summary-card">
+                  <div class="rsc-label">Technical Disciplines Share</div>
+                  <div class="rsc-val" id="repMetricTechPct" style="color:#2563eb;">55.0%</div>
+                  <div class="rsc-sub" id="repMetricTechHours">22 hrs / week dedicated</div>
+                </div>
+                <div class="rep-summary-card">
+                  <div class="rsc-label">Extracurricular Share</div>
+                  <div class="rsc-val" id="repMetricExtraPct" style="color:#059669;">45.0%</div>
+                  <div class="rsc-sub" id="repMetricExtraHours">18 hrs / week dedicated</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 3: Day-Wise Weekly Routine Breakdown Table -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">3. DAY-WISE WEEKLY ROUTINE &amp; PERCENTAGE SHARE</h3>
+                <span class="rep-caption">Monday through Sunday Breakdown</span>
+              </div>
+              <div class="report-dist-table-wrap">
+                <table class="report-data-table" id="reportDailyBreakdownTable">
+                  <thead>
+                    <tr>
+                      <th style="width: 130px;">Day of Week</th>
+                      <th>Scheduled Focus Activities</th>
+                      <th style="width: 130px;">Tracked Time</th>
+                      <th style="width: 160px;">Share of Week (%)</th>
+                      <th style="width: 140px;">Contribution Meter</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportDailyBreakdownBody">
+                    <!-- Populated dynamically by app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SECTION 4: Top 3 Priority Weekly Interests -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">4. TOP 3 PRIORITY WEEKLY INTERESTS</h3>
+                <span class="rep-caption">Primary, Secondary, and Tertiary Focus Areas</span>
+              </div>
+              <div class="report-top3-grid" id="reportTop3Grid">
+                <!-- Dynamically populated top 3 cards -->
+              </div>
+            </div>
+
+            <!-- SECTION 5: Comprehensive Weekly Percentage Matrix -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">5. COMPREHENSIVE WEEKLY ACTIVITY PERCENTAGE MATRIX</h3>
+                <span class="rep-caption">Complete Activity Distribution &amp; Pedagogical Classification</span>
+              </div>
+              <div class="report-dist-table-wrap">
+                <table class="report-data-table" id="reportDistTable">
+                  <thead>
+                    <tr>
+                      <th style="width:65px;">Rank</th>
+                      <th>Activity Domain</th>
+                      <th>Category</th>
+                      <th style="width:130px;">Weekly Time</th>
+                      <th style="width:150px;">Percentage Share (%)</th>
+                      <th style="width:140px;">Distribution Meter</th>
+                      <th style="width:120px;">Interest Level</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportDistTableBody">
+                    <!-- Dynamic -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- SECTION 6: Categorical Weekly Profile Breakdown -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">6. CATEGORICAL WEEKLY PROFILE BREAKDOWN</h3>
+                <span class="rep-caption">Skill Distribution by Academic &amp; Extracurricular Cluster</span>
+              </div>
+              <div class="report-profile-categories-grid">
+                <div class="profile-cat-card">
+                  <div class="cat-card-header tech-border">
+                    <span style="font-size:1.1rem;">💻</span>
+                    <h4>Technical</h4>
+                  </div>
+                  <ul class="cat-list" id="reportTechList"></ul>
+                </div>
+                <div class="profile-cat-card">
+                  <div class="cat-card-header creative-border">
+                    <span style="font-size:1.1rem;">🎨</span>
+                    <h4>Creative</h4>
+                  </div>
+                  <ul class="cat-list" id="reportCreativeList"></ul>
+                </div>
+                <div class="profile-cat-card">
+                  <div class="cat-card-header sports-border">
+                    <span style="font-size:1.1rem;">⚽</span>
+                    <h4>Sports</h4>
+                  </div>
+                  <ul class="cat-list" id="reportSportsList"></ul>
+                </div>
+                <div class="profile-cat-card">
+                  <div class="cat-card-header other-border">
+                    <span style="font-size:1.1rem;">📚</span>
+                    <h4>Recreation / Other</h4>
+                  </div>
+                  <ul class="cat-list" id="reportOtherList"></ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 7: Algorithmic Weekly Assessment & Faculty Recommendations -->
+            <div class="report-section">
+              <div class="rep-section-header">
+                <h3 class="rep-section-title">7. ALGORITHMIC WEEKLY ASSESSMENT &amp; RECOMMENDATIONS</h3>
+                <span class="rep-caption">Pedagogical Evaluation for 5th Semester CSE</span>
+              </div>
+              <div class="report-narrative-box">
+                <p class="report-narrative-p" id="reportNarrativeP">
+                  <!-- Dynamic narrative -->
+                </p>
+                <div class="report-observations" id="reportObservationsGrid">
+                  <!-- Dynamic observations -->
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 8: Signatures & Academic Endorsement -->
+            <div class="report-signatures-section">
+              <div class="sig-block">
+                <div class="sig-line"></div>
+                <div class="sig-title">Student Signature</div>
+                <div class="sig-subtitle" id="repSigStudentName">Sahana K.</div>
+              </div>
+
+              <div class="sig-block">
+                <div class="sig-line"></div>
+                <div class="sig-title">Faculty Project Advisor / Evaluator</div>
+                <div class="sig-subtitle">Department of CSE</div>
+              </div>
+
+              <div class="sig-block">
+                <div class="sig-line"></div>
+                <div class="sig-title">Head of Department (HOD)</div>
+                <div class="sig-subtitle">Seal &amp; Academic Approval</div>
+              </div>
+            </div>
+
+            <!-- Report Footer Stamp -->
+            <div class="report-sheet-footer">
+              <span>Student Interest Portfolio Report Generator &bull; 5th Semester CSE Mini Project</span>
+              <span>Evaluated via Native Mathematical Percentage Engine &bull; Weekly Cycle</span>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW 5: SETTINGS & STUDENT DETAILS             -->
+        <!-- ============================================== -->
+        <section class="tab-view" id="view-settings">
+
+          <div class="page-header-row">
+            <div>
+              <h2 class="page-title">Student Profile & Settings</h2>
+              <p class="page-subtitle">Configure student details for the portfolio report, manage data backups, and
+                configure preferences.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+
+            <!-- Student Profile Form -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Student Information</h3>
+                  <p class="card-subtitle">These details appear directly on the generated portfolio report</p>
+                </div>
+              </div>
+              <form id="studentProfileForm" class="settings-form"
+                onsubmit="event.preventDefault(); app.saveStudentProfile();">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="inpStudentName">Student Full Name *</label>
+                    <input type="text" id="inpStudentName" class="form-control" required placeholder="e.g. Sahana K.">
+                  </div>
+                  <div class="form-group">
+                    <label for="inpStudentID">Student ID / USN *</label>
+                    <input type="text" id="inpStudentID" class="form-control" required placeholder="e.g. 1MS22CS095">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="inpBranch">Branch / Discipline *</label>
+                    <input type="text" id="inpBranch" class="form-control" required
+                      placeholder="e.g. Computer Science & Engineering">
+                  </div>
+                  <div class="form-group">
+                    <label for="inpSemester">Semester *</label>
+                    <select id="inpSemester" class="form-control">
+                      <option value="1st Semester">1st Semester</option>
+                      <option value="2nd Semester">2nd Semester</option>
+                      <option value="3rd Semester">3rd Semester</option>
+                      <option value="4th Semester">4th Semester</option>
+                      <option value="5th Semester" selected>5th Semester</option>
+                      <option value="6th Semester">6th Semester</option>
+                      <option value="7th Semester">7th Semester</option>
+                      <option value="8th Semester">8th Semester</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="inpCollege">Institution / College Name</label>
+                    <input type="text" id="inpCollege" class="form-control"
+                      placeholder="e.g. Dayananda Sagar College of Engineering">
+                  </div>
+                  <div class="form-group">
+                    <label for="inpAcademicYear">Academic Year</label>
+                    <input type="text" id="inpAcademicYear" class="form-control" placeholder="e.g. 2024–2025">
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                      <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    </svg>
+                    <span>Save Student Details</span>
+                  </button>
+                  <button type="button" class="btn btn-secondary" onclick="app.resetDefaultProfile()">
+                    <span>Reset Default</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Relational Database & Backend Server Card -->
+            <div class="card" id="cardDatabaseConfig">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">🗄️ Relational Database &amp; Backend Server</h3>
+                  <p class="card-subtitle">Django REST API &amp; Relational SQLite / MySQL Storage Engine</p>
+                </div>
+                <span class="badge badge-amber" id="dbStatusBadge">○ Offline (LocalStorage Fallback)</span>
+              </div>
+
+              <div class="db-status-banner"
+                style="background:var(--bg-card-subtle);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:18px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                  <div>
+                    <strong style="font-size:0.9rem;color:var(--text-main);">Current Database Status:</strong>
+                    <div id="dbStatusDesc" style="font-size:0.82rem;color:var(--text-muted);margin-top:2px;">
+                      Backend server is currently offline. Operating in LocalStorage mode. Run
+                      <code>run_backend.bat</code> to connect the SQLite database.
+                    </div>
+                  </div>
+                  <div style="display:flex;gap:8px;">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="app.testDatabaseConnection()">
+                      <span>⚡ Test Connection</span>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="app.syncDatabase()">
+                      <span>🔄 Sync Database</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="project-specs-list">
+                <div class="spec-item">
+                  <span class="spec-key">Database Engine</span>
+                  <span class="spec-val">SQLite 3 (<code>backend/db.sqlite3</code>) • Relational ACID Database</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Backend Framework</span>
+                  <span class="spec-val">Python 3 &amp; Django 6.1 RESTful API Server</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Server Host &amp; Port</span>
+                  <span class="spec-val"><a href="http://127.0.0.1:8000/" target="_blank"
+                      style="color:var(--primary);font-family:var(--font-mono);font-weight:700;">http://127.0.0.1:8000/</a></span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Django Admin Dashboard</span>
+                  <span class="spec-val"><a href="http://127.0.0.1:8000/admin/" target="_blank"
+                      style="color:var(--primary);font-family:var(--font-mono);font-weight:700;">http://127.0.0.1:8000/admin/</a>
+                    (User: <code>admin</code> / Pass: <code>admin123</code>)</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Relational Tables</span>
+                  <span class="spec-val"><code>api_student</code>, <code>api_timetable</code>,
+                    <code>api_subjectassessment</code>, <code>api_portfolioreport</code></span>
+                </div>
+              </div>
+
+              <div class="data-actions-box" style="margin-top:16px;">
+                <h4>🚀 How to Connect the Database</h4>
+                <ol style="font-size:0.83rem;color:var(--text-muted);margin:8px 0 12px 20px;line-height:1.6;">
+                  <li>Ensure <strong>Python</strong> is installed on this PC (<a
+                      href="https://www.python.org/downloads/" target="_blank"
+                      style="color:var(--primary);">python.org</a>).</li>
+                  <li>Double-click <strong><code>run_backend.bat</code></strong> in this project root folder, or run:
+                    <div
+                      style="background:var(--bg-main);padding:8px 12px;border-radius:var(--radius-sm);margin:6px 0;font-family:var(--font-mono);color:var(--primary);">
+                      cd backend &amp;&amp; python manage.py runserver 127.0.0.1:8000
+                    </div>
+                  </li>
+                  <li>Once started, click <strong>"⚡ Test Connection"</strong> above. The badge will switch to
+                    <strong>🟢 Connected</strong> and synchronize all student profiles, weekly timetables, and
+                    assessments with the database!</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Project Meta & Data Tools -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Project Architecture & Data Storage</h3>
+                  <p class="card-subtitle">5th Sem CSE Mini Project Technical Specifications</p>
+                </div>
+              </div>
+              <div class="project-specs-list">
+                <div class="spec-item">
+                  <span class="spec-key">Frontend Architecture</span>
+                  <span class="spec-val">Pure Vanilla HTML5, CSS3, ES6 JavaScript</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">State & Persistence</span>
+                  <span class="spec-val">Browser LocalStorage API (No Backend Required)</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Rendering Engine</span>
+                  <span class="spec-val">Dynamic SVG Visualizations & CSS Grid</span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Calculation Formula</span>
+                  <span class="spec-val"><code>(Activity Slots / Total Tracked Slots) &times; 100</code></span>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-key">Print Output</span>
+                  <span class="spec-val">Standard A4 Paginated Print Media Stylesheet</span>
+                </div>
+              </div>
+
+              <div class="data-actions-box">
+                <h4>Data Management</h4>
+                <div class="data-btn-row">
+                  <button class="btn btn-sm btn-secondary" onclick="app.exportJsonData()">
+                    <span>Export JSON Backup</span>
+                  </button>
+                  <button class="btn btn-sm btn-secondary" onclick="document.getElementById('importFileInput').click()">
+                    <span>Import JSON</span>
+                  </button>
+                  <input type="file" id="importFileInput" accept=".json" style="display:none"
+                    onchange="app.importJsonData(event)">
+                  <button class="btn btn-sm btn-outline-danger" onclick="app.clearTimetable(true)">
+                    <span>Reset Data</span>
+                  </button>
+                </div>
+
+                <h4 style="margin-top: 18px;">Active Student Account &amp; Session</h4>
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">
+                  Each student maintains an independent weekly routine and isolated interest profile. You can log out
+                  safely to switch student accounts or register a new one.
+                </p>
+                <div class="data-btn-row">
+                  <button type="button" class="btn btn-sm btn-danger-soft" onclick="app.logout()">
+                    <span>🚪 Log Out of Current Account</span>
+                  </button>
+                  <a href="login.html" class="btn btn-sm btn-secondary">
+                    <span>🔄 Switch Student Account</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- Interactive Subject Questions Modal (Opened when clicking timetable subjects) -->
+  <!-- ============================================================== -->
+  <div class="questions-modal-backdrop" id="subjectQuestionsModal" style="display: none;"
+    onclick="if(event.target === this) app.closeQuestionsModal()">
+    <div class="questions-modal-box" role="dialog" aria-modal="true" aria-labelledby="qModalSubjectTitle">
+
+      <!-- Modal Header -->
+      <div class="q-modal-header">
+        <div class="q-modal-header-left">
+          <div class="q-modal-icon" id="qModalIcon">💻</div>
+          <div>
+            <div class="q-modal-meta">
+              <span class="chip chip-sm" id="qModalCategoryChip">Technical Core</span>
+              <span class="badge badge-purple" id="qModalScoreBadge">Score: 90.0% (High)</span>
+              <span class="chip chip-sm"
+                style="background:rgba(99,102,241,0.12);color:var(--primary);font-weight:700;">📅 Timetable
+                Linked</span>
+            </div>
+            <h3 class="q-modal-title" id="qModalSubjectTitle">C Programming: Diagnostic Questions</h3>
+          </div>
+        </div>
+        <button type="button" class="q-modal-close-btn" onclick="app.closeQuestionsModal()"
+          aria-label="Close questions modal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Action & Info Ribbon -->
+      <div class="q-modal-banner">
+        <div class="q-modal-banner-text">
+          <span>🎯 <strong>10 Targeted Diagnostic Questions</strong> &bull; Click any 5-point rating below to assess
+            your passion, depth, and career interest. Live score updates instantly!</span>
+        </div>
+        <div class="q-modal-banner-actions">
+          <button type="button" class="btn btn-xs btn-secondary" onclick="app.autoFillModalQuestionsDemo()"
+            title="Pre-fill demo scores">
+            <span>⚡ Demo Answers</span>
+          </button>
+          <button type="button" class="btn btn-xs btn-outline" onclick="app.resetModalQuestions()"
+            title="Reset choices">
+            <span>🧹 Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body (10 Questions List) -->
+      <div class="q-modal-body" id="modalQuestionsBody">
+        <div class="modal-questions-list" id="modalQuestionsList">
+          <!-- Dynamically populated with the 10 questions -->
+        </div>
+      </div>
+
+      <!-- Real-Time Score Ribbon -->
+      <div class="q-modal-score-ribbon" id="qModalScoreRibbon">
+        <div class="qmsr-left">
+          <div class="qmsr-score-circle" id="qModalScoreCircle">
+            <span class="qmsr-pct" id="qModalPctText">90%</span>
+            <span class="qmsr-lbl">Interest</span>
+          </div>
+          <div class="qmsr-info">
+            <div class="qmsr-status-line">
+              <strong id="qModalLevelText">High Interest Priority</strong>
+              <span class="qmsr-pts" id="qModalPointsText">(90.0 / 100 pts)</span>
+            </div>
+            <div class="qmsr-progress-wrap">
+              <div class="qmsr-progress-bar" id="qModalProgressBar" style="width: 100%;"></div>
+            </div>
+            <span class="qmsr-answered-count" id="qModalAnsweredCount">10 of 10 questions answered</span>
+          </div>
+        </div>
+
+        <div class="qmsr-right">
+          <button type="button" class="btn btn-secondary" onclick="app.closeQuestionsModal()">
+            <span>Cancel</span>
+          </button>
+          <button type="button" class="btn btn-primary" id="qModalSaveBtn" onclick="app.saveModalAssessment()">
+            <span>💾 Save Assessment &amp; Update Timetable</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="logout-modal-backdrop" id="logoutModal" style="display: none;"
+    onclick="if(event.target === this) app.closeLogoutModal()">
+    <div class="logout-modal-box" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+      <div class="logout-modal-header">
+        <div class="logout-modal-icon">🚪</div>
+        <div>
+          <h3 class="logout-modal-title" id="logoutModalTitle">Sign Out of Student Account</h3>
+          <span class="text-subtle" style="font-size:0.78rem;">Individual Student Session</span>
+        </div>
+      </div>
+      <div class="logout-modal-body">
+        <p>Are you sure you want to log out from this device?</p>
+        <div class="logout-user-highlight">
+          <div class="avatar" id="modalLogoutAvatar" style="width:36px;height:36px;font-size:0.8rem;">SK</div>
+          <div>
+            <strong id="modalLogoutName">Sahana K.</strong>
+            <div style="font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);" id="modalLogoutUSN">
+              USN: 1MS22CS095</div>
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:0.82rem;color:var(--text-muted);">
+          ✓ Your weekly timetable, interest calculations, and portfolio data are safely preserved in local storage under
+          your USN.
+        </p>
+      </div>
+      <div class="logout-modal-footer">
+        <button type="button" class="btn btn-outline" onclick="app.closeLogoutModal()">Cancel</button>
+        <button type="button" class="btn btn-danger-soft" onclick="app.confirmLogout()" id="confirmLogoutBtn">
+          <span>Yes, Sign Out &rarr;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript Files -->
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
